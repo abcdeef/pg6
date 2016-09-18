@@ -1,11 +1,8 @@
 import psycopg2
 import sqlite3
-import time, sys, math
-from os.path import expanduser
+import sys, math
 
-home = expanduser("~")
-
-sq = sqlite3.connect(home + '/sit2d_2.db')
+sq = sqlite3.connect('/sit2d_2.db')
 sqc = sq.cursor()
 conn = psycopg2.connect("dbname=gis user=florian")
 cur = conn.cursor()
