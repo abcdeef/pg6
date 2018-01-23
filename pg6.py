@@ -277,14 +277,14 @@ def myways(ways):
     	
 	for osmid, tags, refs in ways:
 		#if osmid  not in (395675446,27216435,27809465,27280925,366358001,394911465,26613341,27811900,8162072):
-		#if osmid  not in (97593880,1):
-		#if poly_count > 100000:
-		#	continue
+		if osmid  not in (27811900, 8162072,1):
+		#if poly_count > 10000:
+			continue
 		
-		#print ways
-		#print osmid
+		#print 
+		print osmid
 		#print refs
-		#print tags
+		print tags
 
 		if tags.get('building') != None:
 			if tags.get('barrier') == None and tags.get('construction') == None and tags.get('covered') == None and tags.get('culvert') == None and tags.get('disused') == None and tags.get('military') == None:
@@ -436,15 +436,15 @@ def vbvb3_neu(x3):
 		i2n = []
 		t1 = timer()
 
-		i2n.append(binaersuche_rekursiv(indices2n,1,gh[1],0,len(indices2n)-1))
+		i2n.append(binaersuche_rekursiv(indices2n,1,gh,0,len(indices2n)-1))
 		
-		if indices2n[i2n[0]+1][1] == gh[1]:
+		if indices2n[i2n[0]+1][1] == gh:
 			i2n.append(i2n[0]+1)
-		if indices2n[i2n[0]+2][1] == gh[1]:
+		if indices2n[i2n[0]+2][1] == gh:
 			i2n.append(i2n[0]+2)
-		if indices2n[i2n[0]-1][1] == gh[1]:
+		if indices2n[i2n[0]-1][1] == gh:
 			i2n.append(i2n[0]-1)
-		if indices2n[i2n[0]-2][1] == gh[1]:
+		if indices2n[i2n[0]-2][1] == gh:
 			i2n.append(i2n[0]-2)
 		
 		
@@ -454,12 +454,14 @@ def vbvb3_neu(x3):
 				p0 = vertex[binaersuche_rekursiv(vertex, 0, indices3[em][1], 0, len(vertex)-1)]
 			if indices3[em][2] == indices2n[i2n[0]][3]:
 				p1 = vertex[binaersuche_rekursiv(vertex, 0, indices3[em][1], 0, len(vertex)-1)]
+
 		p18=binaersuche_rekursiv(i_ix, 0, indices2n[i2n[1]][0], 0, len(i_ix)-1)
 		for em in i_ix[p18][1]:
 			if indices3[em][2] == indices2n[i2n[1]][2]:
 				p2 = vertex[binaersuche_rekursiv(vertex, 0, indices3[em][1], 0, len(vertex)-1)]
 			if indices3[em][2] == indices2n[i2n[1]][3]:
 				p3 = vertex[binaersuche_rekursiv(vertex, 0, indices3[em][1], 0, len(vertex)-1)]
+
 		p28=binaersuche_rekursiv(i_ix, 0, indices2n[i2n[2]][0], 0, len(i_ix)-1)
 		for em in i_ix[p28][1]:
 			if indices3[em][2] == indices2n[i2n[2]][2]:
@@ -482,8 +484,51 @@ def vbvb3_neu(x3):
 		k = [i[0]+indices2n[i2n[2]][4],i[1]+indices2n[i2n[2]][5]]
 		l = [j[0]+indices2n[i2n[2]][4],j[1]+indices2n[i2n[2]][5]]
 
-		#draw([[a,b,d,c],[e,f,h,g],[i,j,l,k]],[])
-		draw([[a,b,d,c],[i,j,l,k]],[])
+		s1 = sp(a,c,i,k)
+		#if s1 == None:
+		s12 = sp(a,c,j,l)
+		#if s1 == None:
+		s13 = sp(b,d,i,k)
+		#if s1 == None:
+		s14 = sp(b,d,j,l)
+
+		s2 = sp(a,c,e,g)
+		#if s2 == None:
+		s22 = sp(a,c,f,h)
+		#if s2 == None:
+		s23 = sp(b,d,e,g)
+		#if s2 == None:
+		s24 = sp(b,d,f,h)
+		
+		s3 = sp(e,g,i,k)
+		#if s3 == None:
+		s32 = sp(e,g,j,l)
+		#if s3 == None:
+		s33 = sp(f,h,i,k)
+		#if s3 == None:
+		s34 = sp(f,h,j,l)
+
+		print s1
+		print s12
+		print s13
+		print s14
+		print '---------'
+		print s2
+		print s22
+		print s23
+		print s24
+		print '---------'
+		print s3
+		print s32
+		print s33
+		print s34
+
+		draw([[a,b,d,c],[e,f,h,g],[i,j,l,k]],[s1, s2, s3])
+		#draw([[a,b,d,c]],[])
+		#draw([[e,f,h,g]],[])
+		#draw([[i,j,l,k]],[])
+		#draw([[a,b,d,c],[i,j,l,k]],[])
+
 		if index % 10 == 0:
 			tmp =  timer()
 			footer = str(round(index / (tmp - start),2)) + "k/s"
@@ -814,10 +859,10 @@ for index,em in enumerate(indices2n,start=0):
 		count = count + 1
 	else:
 		if count == 1:
-			#x2.append(index)
 			x2.append(old_em)
-		#elif count == 2:
-			#x3.append(old_em)
+		elif count == 2:
+			x3.append(old_em)
+			print "asd"
 		#elif count == 3:
 			#x4.append(old_em)
 		count = 0
@@ -825,7 +870,7 @@ for index,em in enumerate(indices2n,start=0):
 
 i_ix = createIX(indices3,0)
 vbvb2_neu(x2)
-#vbvb3_neu(x3)
+vbvb3_neu(x3)
 
 #start = timer()
 #vbvb3_neu(x3)
