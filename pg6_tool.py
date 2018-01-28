@@ -41,34 +41,43 @@ def aufStrecke(A,B,P):
 		return True
 
 def sp(A,B,C,D):
+   try:
 	#print ''
 	#print A
 	#print B
 	#print C
 	#print D
-   try:
 #Schnittpunkt von AB und CD
 	a1 = A[1] - B[1]
 	a2 = C[1] - D[1]
 	b1 = B[0] - A[0]
 	b2 = D[0] - C[0]
 
+	#print "a1: " + str(a1)
+	#print "a2: " + str(a2)
+	#print "b1: " + str(b1)
+	#print "b2: " + str(b2)
+
+	#if (a1 == 0 and a2 == 0) or (b1 == 0 and b2 == 0):
+	if A[0]-C[0]+A[1]-C[1] == 0 or A[0]-D[0]+A[1]-D[1] == 0:
+		return A
+	if B[0]-C[0]+B[1]-C[1] == 0 or B[0]-D[0]+B[1]-D[1] == 0:
+		return B
 	if (a1 == 0 and a2 == 0) or (b1 == 0 and b2 == 0):
-		if A[0]-C[0]+A[1]-C[1] == 0 or A[0]-D[0]+A[1]-D[1] == 0:
-			return A
-		if B[0]-C[0]+B[1]-C[1] == 0 or B[0]-D[0]+B[1]-D[1] == 0:
-			return B
 		return None
 	
 	c1 = B[0] * A[1] - A[0] * B[1]
 	c2 = D[0] * C[1] - C[0] * D[1]
 	ds = a1 * b2 - a2 * b1
+	#print "c1: " + str(c1)
+	#print "c2: " + str(c2)
+	#print "ds: " + str(ds)
 
 	if ds == 0:
 		return
 	
 	s = [round((c1 * b2 - c2 * b1) / ds, NDIGITS), round((a1 * c2 - a2 * c1) / ds, NDIGITS)]
-
+	#print "s: " + str(s)
 	if aufStrecke(A,B, s) == False:
 		return None
 	if aufStrecke(C,D, s) == False:
@@ -92,6 +101,69 @@ def sp(A,B,C,D):
 	print ""
 	raise
 	    
+def sp2(A,B,C,D):
+   try:
+	#print ''
+	#print A
+	#print B
+	#print C
+	#print D
+#Schnittpunkt von AB und CD
+	a1 = A[2] - B[2]
+	a2 = C[2] - D[2]
+	b1 = B[1] - A[1]
+	b2 = D[1] - C[1]
+
+	#print "a1: " + str(a1)
+	#print "a2: " + str(a2)
+	#print "b1: " + str(b1)
+	#print "b2: " + str(b2)
+
+	#if (a1 == 0 and a2 == 0) or (b1 == 0 and b2 == 0):
+	if A[1]-C[1]+A[2]-C[2] == 0 or A[1]-D[1]+A[2]-D[2] == 0:
+		#return A
+		return None
+	if B[1]-C[1]+B[2]-C[2] == 0 or B[1]-D[1]+B[2]-D[2] == 0:
+		#return B
+		return None
+	if (a1 == 0 and a2 == 0) or (b1 == 0 and b2 == 0):
+		return None
+	
+	c1 = B[1] * A[2] - A[1] * B[2]
+	c2 = D[1] * C[2] - C[1] * D[2]
+	ds = a1 * b2 - a2 * b1
+	#print "c1: " + str(c1)
+	#print "c2: " + str(c2)
+	#print "ds: " + str(ds)
+
+	if ds == 0:
+		return
+	
+	s = [0,0,round((c1 * b2 - c2 * b1) / ds, NDIGITS), round((a1 * c2 - a2 * c1) / ds, NDIGITS)]
+	#print "s: " + str(s)
+	if aufStrecke(A[1:],B[1:],s[2:]) == False:
+		return None
+	if aufStrecke(C[1:],D[1:],s[2:]) == False:
+		return None
+
+	return s
+
+   except:	
+	print "\nA: " + str(A)
+	print "B: " + str(B)
+	print "C: " + str(C)
+	print "D: " + str(D)
+	
+	print "a1: " + str(a1)
+	print "a2: " + str(a2)
+	print "b1: " + str(b1)
+	print "b2: " + str(b2)
+	print "c1: " + str(c1)
+	print "c2: " + str(c2)
+
+	print ""
+	raise
+
 def angleV(p1, p2):
 	# Winkel zwischen 2 Vektoren
 	# angle: 1 -> 180grad, 0 -> 90grad

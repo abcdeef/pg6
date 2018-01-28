@@ -173,7 +173,7 @@ def insertV(p_x, p_y):
     global vertex
     
     x = findV(g_x, g_y)
-
+    #print x
     if x == -1:
         v_id = v_id + 1
         vertex.append((v_id,g_x,g_y))
@@ -276,16 +276,15 @@ def myways(ways):
 		return
     	
 	for osmid, tags, refs in ways:
-		#if osmid  not in (395675446,27216435,27809465,27280925,366358001,394911465,26613341,27811900,8162072):
-		if osmid  not in (27811900, 8162072,1):
+		if osmid  not in (395675446,27216435,27809465,27280925,366358001,394911465,26613341,27811900,8162072):
+		#if osmid  not in (27811900, 8162072,1):
 		#if poly_count > 10000:
 			continue
 		
 		#print 
-		print osmid
+		print str(osmid) + ": " + str(tags)
 		#print refs
-		print tags
-
+		
 		if tags.get('building') != None:
 			if tags.get('barrier') == None and tags.get('construction') == None and tags.get('covered') == None and tags.get('culvert') == None and tags.get('disused') == None and tags.get('military') == None:
 				poly_add(osmid,refs,'building', 2)
@@ -424,12 +423,12 @@ def vbvb3_neu(x3):
 	global i_ix
         global indices2n
 	global indices3
-
+	print '##################'
 	footer = ""
 	verts = float(len(x2))
 	
-	for em in x3:
-		print em
+	#for em in x3:
+	#	print em
 	start = timer()
 	for index,gh in enumerate(x3,start=1):
 		
@@ -473,62 +472,112 @@ def vbvb3_neu(x3):
 		b = p1[1:]
 		c = [a[0]+indices2n[i2n[0]][4],a[1]+indices2n[i2n[0]][5]]
 		d = [b[0]+indices2n[i2n[0]][4],b[1]+indices2n[i2n[0]][5]]	
-
+	
 		e = p2[1:]
 		f = p3[1:]
 		g = [e[0]+indices2n[i2n[1]][4],e[1]+indices2n[i2n[1]][5]]
 		h = [f[0]+indices2n[i2n[1]][4],f[1]+indices2n[i2n[1]][5]]
-
+		
 		i = p4[1:]
 		j = p5[1:]
 		k = [i[0]+indices2n[i2n[2]][4],i[1]+indices2n[i2n[2]][5]]
 		l = [j[0]+indices2n[i2n[2]][4],j[1]+indices2n[i2n[2]][5]]
 
-		s1 = sp(a,c,i,k)
-		#if s1 == None:
-		s12 = sp(a,c,j,l)
-		#if s1 == None:
-		s13 = sp(b,d,i,k)
-		#if s1 == None:
-		s14 = sp(b,d,j,l)
+		s1 = []
+		s1.append([p0[0],p4[0],sp(a,c,i,k)])
+		s1.append([p0[0],p5[0],sp(a,c,j,l)])
+		s1.append([p1[0],p4[0],sp(b,d,i,k)])
+		s1.append([p1[0],p5[0],sp(b,d,j,l)])
 
-		s2 = sp(a,c,e,g)
-		#if s2 == None:
-		s22 = sp(a,c,f,h)
-		#if s2 == None:
-		s23 = sp(b,d,e,g)
-		#if s2 == None:
-		s24 = sp(b,d,f,h)
+		s2 = []
+		s2.append([p0[0],p2[0],sp(a,c,e,g)])
+		s2.append([p0[0],p3[0],sp(a,c,f,h)])
+		s2.append([p1[0],p2[0],sp(b,d,e,g)])
+		s2.append([p1[0],p3[0],sp(b,d,f,h)])
 		
-		s3 = sp(e,g,i,k)
-		#if s3 == None:
-		s32 = sp(e,g,j,l)
-		#if s3 == None:
-		s33 = sp(f,h,i,k)
-		#if s3 == None:
-		s34 = sp(f,h,j,l)
+		s3 = []
+		s3.append([p2[0],p4[0],sp(e,g,i,k)])
+		s3.append([p2[0],p5[0],sp(e,g,j,l)])
+		s3.append([p3[0],p4[0],sp(f,h,i,k)])
+		s3.append([p3[0],p5[0],sp(f,h,j,l)])
 
-		print s1
-		print s12
-		print s13
-		print s14
-		print '---------'
-		print s2
-		print s22
-		print s23
-		print s24
-		print '---------'
-		print s3
-		print s32
-		print s33
-		print s34
+		n1 = 0
+		for em in s1:
+			print em
+			if em[2] != None:
+				n1 = n1 + 1
+				se1 = em[2]
+			
+		print '---------------'
+		n2 = 0
+		for em in s2:
+			print em
+			if em[2] != None:
+				n2 = n2 + 1
+				se2 = em[2]
 
-		draw([[a,b,d,c],[e,f,h,g],[i,j,l,k]],[s1, s2, s3])
+		print '---------------'
+		n3 = 0
+		for em in s3:
+			print em
+			if em[2] != None:
+				n3 = n3 + 1
+				se3 = em[2]
+
+		if n1 + n2 + n3 == 3:
+			#print "i1: " + str(p4)
+			#for em in vertex:
+				#print em
+			#print "------------------"
+			for em in s1:
+				if em[2] != None:
+					ii = insertV(em[2][0], em[2][1])
+					[asd,seq] = update_indices2(indices3, ii, em[0], indices2n[i2n[0]][0], ii, em[1], indices2n[i2n[2]][0])
+					break
+			#print "i2: " + str(p4)
+			#for em in vertex:
+				#print em
+			#print "------------------"
+			for em in s2:
+				if em[2] != None:
+					ii = insertV(em[2][0], em[2][1])
+					[asd,seq] = update_indices2(indices3, ii, em[0], indices2n[i2n[0]][0], ii, em[1], indices2n[i2n[1]][0])
+					break
+			#print "i3: " + str(i)
+			for em in s3:
+				if em[2] != None:
+					ii = insertV(em[2][0], em[2][1])
+					[asd,seq] = update_indices2(indices3, ii, em[0], indices2n[i2n[1]][0], ii, em[1], indices2n[i2n[2]][0])
+					break
+			#l_indices = len(indices3)
+			#i_ix[asd][1].append(l_indices)
+			#i_ix[asd][1].append(l_indices+1)
+			#i_ix[asd][1].append(l_indices+2)
+			#indices3.append([indices2n[i2n[0]][0], i, seq+1])
+			#indices3.append([indices2n[i2n[0]][0], p0[0], seq+2])
+			#indices3.append([indices2n[i2n[0]][0], p2[0], seq+3])
+			#i = insertV(s2[0][2], s2[0][3])
+			#[asd,seq] = update_indices2(indices3, i, s2[0][0], indices2n[i2n[0]][0], i, s2[0][1], indices2n[i2n[1]][0])
+			
+			#i = insertV(s3[0][2], s3[0][3])
+			#[asd,seq] = update_indices2(indices3, i, s3[0][0], indices2n[i2n[0]][0], i, s3[0][1], indices2n[i2n[1]][0])
+			
+		#print se1
+		#print se2
+		#print se3
+		#print '##################'
+		#print "i: " + str(i)
+		#print j
+		#print k
+		#print l
+		#print '##################'
+		draw([[a,b,d,c],[e,f,h,g],[i,j,l,k]],[se1, se2, se3])
 		#draw([[a,b,d,c]],[])
 		#draw([[e,f,h,g]],[])
 		#draw([[i,j,l,k]],[])
 		#draw([[a,b,d,c],[i,j,l,k]],[])
 
+		
 		if index % 10 == 0:
 			tmp =  timer()
 			footer = str(round(index / (tmp - start),2)) + "k/s"
@@ -677,6 +726,9 @@ def update_indices2(indices, i0, i10, L10 , i1, i11, L11):
 	return [ii10,seq]
 
 def draw(poly,points):
+	x = []
+	y = []
+	
 	fig, ax = plt.subplots()
 	Path = mpath.Path
 	path_data2 = []
@@ -694,12 +746,12 @@ def draw(poly,points):
 		path_data2.append((Path.CLOSEPOLY, em1[0]))
 		#print em1[0]
 		#print "------------"
-	codes, verts = zip(*path_data2)
-	path = mpath.Path(verts, codes)
-
-	# plot control points and connecting lines
-	x, y = zip(*path.vertices)
-	line, = ax.plot(x, y, 'g.-')
+	if len(poly) > 0: 
+		codes, verts = zip(*path_data2)
+		path = mpath.Path(verts, codes)
+		# plot control points and connecting lines	
+		x, y = zip(*path.vertices)
+		line, = ax.plot(x, y, 'g.-')
 	
 	pointx = []
 	pointy = []
@@ -862,7 +914,6 @@ for index,em in enumerate(indices2n,start=0):
 			x2.append(old_em)
 		elif count == 2:
 			x3.append(old_em)
-			print "asd"
 		#elif count == 3:
 			#x4.append(old_em)
 		count = 0
@@ -870,7 +921,7 @@ for index,em in enumerate(indices2n,start=0):
 
 i_ix = createIX(indices3,0)
 vbvb2_neu(x2)
-vbvb3_neu(x3)
+vbvb3_neu(x3[2:3])
 
 #start = timer()
 #vbvb3_neu(x3)
