@@ -276,13 +276,13 @@ def myways(ways):
 		return
     	
 	for osmid, tags, refs in ways:
-		if osmid  not in (395675446,27216435,27809465,27280925,366358001,394911465,26613341,27811900,8162072):
+		#if osmid  not in (395675446,27216435,27809465,27280925,366358001,394911465,26613341,27811900,8162072):
 		#if osmid  not in (27811900, 8162072,1):
 		#if poly_count > 10000:
-			continue
+		#	continue
 		
 		#print 
-		print str(osmid) + ": " + str(tags)
+		#print str(osmid) + ": " + str(tags)
 		#print refs
 		
 		if tags.get('building') != None:
@@ -899,7 +899,6 @@ indices2n.sort(key=lambda x: x[1])
 indices3.sort(key=lambda x: x[0])
 
 
-
 count = 0
 old_em = [-1,-1]
 x2 = []
@@ -921,7 +920,7 @@ for index,em in enumerate(indices2n,start=0):
 
 i_ix = createIX(indices3,0)
 vbvb2_neu(x2)
-vbvb3_neu(x3[2:3])
+#vbvb3_neu(x3[2:3])
 
 #start = timer()
 #vbvb3_neu(x3)
