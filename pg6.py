@@ -280,7 +280,7 @@ def myways(ways):
 
 	for osmid, tags, refs in ways:
 		#if osmid  not in (395675446,27216435,27809465,27280925,366358001,394911465,26613341,27811900,8162072):
-		#if osmid  not in (4259301,4259299,1):
+		#if osmid  not in (4259298,8141747,1):
 		if poly_count > 10000:
 			continue
 		
@@ -441,17 +441,24 @@ def update_indices2(indices, i0, i10, L10 , i1, i11, L11):
 
     return [ii10,seq]
 
-def printI2N():
+
+def printI2N(i2n=None):
     print 'indices2n:'
-    print 'L_ID       V_ID       SEQ1            SEQ2'
-    for em in indices2n:
-        if em[0] == 4259299:
+    print('{:11}{:12}{:5}{:}'.format('L_ID','V_ID','SEQ1','SEQ2'))
+
+    if i2n is None:
+        for em in indices2n:
+            if em[0] == 8141747:
+                print('{:9}{:12}{:5}{:5}{:10}{:10}'.format(em[0],em[1],em[2],em[3],em[4],em[5],em[6]))
+    else:
+        for em in i2n:
             print em
+            
 def printIndicesJoinVertex():
     print 'indices join vertex:'
     print 'L_ID       V_ID       SEQ'
     for em in indices3:
-        if em[0] == 4259299:
+        if em[0] == 8141747:
             for gh in vertex:
                 if em[1]==gh[0]:
                     print str(em) + ' ' + str(gh)
@@ -475,15 +482,29 @@ def update_indices3(indices, i2n0, i0, i10, L10 , i2n1, i1, i11, L11):
         #printIndicesJoinVertex()
         #print '-------------'
 
-	ii10=binaersuche_rekursiv(i_ix, 0, L10, 0, len(i_ix)-1)        
+        if indices2n[i2n0][6] % 2 == 0:
+            minI = indices2n[i2n0][2]
+            maxI = indices2n[i2n0][2] + 6
+        else:
+            minI = indices2n[i2n0][2] - 4
+            maxI = indices2n[i2n0][2] + 2
+
+       	ii10=binaersuche_rekursiv(i_ix, 0, L10, 0, len(i_ix)-1)        
 	for em in i_ix[ii10][1]:
-            if indices[em][2] >= indices2n[i2n0][2] and indices[em][2] < indices2n[i2n0][2]+6:
+            if indices[em][2] >= minI and indices[em][2] < maxI:
 	        if indices[em][1]==i10:
 		    indices[em][1]=i0
 
+        if indices2n[i2n1][6] % 2 == 0:            
+            minI = indices2n[i2n1][2]
+            maxI = indices2n[i2n1][2] + 6
+        else:
+            minI = indices2n[i2n1][2] - 4
+            maxI = indices2n[i2n1][2] + 2
+
         ii11=binaersuche_rekursiv(i_ix, 0, L11, 0, len(i_ix)-1)
 	for em in i_ix[ii11][1]:
-            if indices[em][2] >= indices2n[i2n1][2] and indices[em][2] < indices2n[i2n1][2]+6:
+            if indices[em][2] >= minI and indices[em][2] < maxI:
 	        if indices[em][1]==i11:
 		    indices[em][1]=i1	
 
@@ -492,11 +513,11 @@ def update_indices3(indices, i2n0, i0, i10, L10 , i2n1, i1, i11, L11):
 	return [ii10,seq]
 
 def afasf(i2n1,i2n2):
-	print 'afasf'
-        print indices2n[i2n1]
-        print indices2n[i2n2]
+	#print 'afasf'
+        #print indices2n[i2n1]
+        #print indices2n[i2n2]
 
-        getRect2(i2n1)
+        #getRect2(i2n1)
 
         [p0,p1,a,b,c,d] = getRect(i2n1)
 	[p2,p3,e,f,g,h] = getRect(i2n2)
@@ -525,8 +546,6 @@ def afasf(i2n1,i2n2):
         [asd,seq] = update_indices3(indices3, i2n1, ii, s1[0][0], indices2n[i2n1][0], i2n2, ii, s1[0][1], indices2n[i2n2][0])
 
 	#draw_wrapper([i2n1,i2n2])
-
-	print '--------->'
 
 def getRect2(i2n):  
     p08=binaersuche_rekursiv(i_ix, 0, indices2n[i2n][0], 0, len(i_ix)-1)
@@ -638,11 +657,10 @@ def vbvb3_neu(x3):
 	for index,gh in enumerate(x3,start=1):  
 		#if index != 3:
 		#	continue   
-          
+            
 		i2n = []
 		t1 = timer()
 
-		
 		i2n.append(binaersuche_rekursiv(indices2n,1,gh,0,len(indices2n)-1))
 		
 		if indices2n[i2n[0]+1][1] == gh:
@@ -654,17 +672,15 @@ def vbvb3_neu(x3):
 		if indices2n[i2n[0]-2][1] == gh:
 			i2n.append(i2n[0]-2)
 		
-		print indices2n[i2n[0]]
-		print indices2n[i2n[1]]
-		print indices2n[i2n[2]]
-
-		draw_wrapper(i2n)
+		#printI2N([indices2n[i2n[0]],indices2n[i2n[1]],indices2n[i2n[2]]] )
+                
+                draw_wrapper(i2n)
 		
 		afasf(i2n[0],i2n[1])
-		#draw_wrapper(i2n)
+		draw_wrapper(i2n)
 
 		afasf(i2n[0],i2n[2])
-		#draw_wrapper(i2n)
+		draw_wrapper(i2n)
 		
 		afasf(i2n[1],i2n[2])		
 		draw_wrapper(i2n)
